@@ -88,7 +88,7 @@ button {
 
 button:hover {
     background: #40916c;
-    box-shadow: 0 5px 15px rgba(64, 194, 135, 0.4);
+    box-shadow: 0 5px 15px rgb(50, 167, 114);
 }
 
 @keyframes fadeIn {
