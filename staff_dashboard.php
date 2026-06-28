@@ -73,8 +73,8 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'staff' && $_SESSION['ro
             <a href="salon_manage.php" class="btn-card">Salon<br><small>සැලෝන්</small></a>
             <a href="channeling_manage.php" class="btn-card">Channeling<br><small>වෛද්‍ය උපදෙස්</small></a>
         </div>
-
-        <a href="logout.php" class="logout-btn">Logout</a>
+        
+<a href="logout.php" class="logout-btn">Logout (පිටවීම)</a>
     </div>
 
     <canvas id="canvas"></canvas>
