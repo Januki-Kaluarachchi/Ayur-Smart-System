@@ -41,7 +41,25 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'staff' && $_SESSION['ro
             background: #2d6a4f;
             transform: translateY(-5px);
         }
-        .logout-btn { color: #ff4d4d; margin-top: 30px; display: inline-block; }
+  
+.logout-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 25px;
+    background-color: transparent;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #ff6b6b;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
     </style>
 </head>
 <body>
