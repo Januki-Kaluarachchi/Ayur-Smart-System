@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Ayur-Smart</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="animation-container">
         <h1 class="logo">Ayur-Smart</h1>
         <p>Your Journey to Wellness Begins Here</p>
     </div>
 
+  
     <canvas id="canvas"></canvas>
 
     <script>
-    
+        
+        setTimeout(function(){
+            window.location.href = 'login.html';
+        }, 3000);
+
+        // Particle Animation
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -28,7 +38,12 @@
                 this.speedY = Math.random() * 3 - 1.5;
                 this.color = '#b7e4c7';
             }
-            update() { this.x += this.speedX; this.y += this.speedY; }
+            update() { 
+                this.x += this.speedX; 
+                this.y += this.speedY; 
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -45,7 +60,8 @@
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
-        init(); animate();
+        init(); 
+        animate();
     </script>
 </body>
 </html>
