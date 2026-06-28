@@ -1,20 +1,18 @@
 <?php
-
-include 'db.php'; 
+include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fullname = $_POST['fullname'];
     $username = $_POST['username'];
-    $password = $_POST['password']; 
+    $password = $_POST['password'];
+    $role = 'customer'; 
 
-
-$sql = "INSERT INTO users (fullname, username, password) VALUES ('$fullname', '$username', '$password')";
+    $sql = "INSERT INTO users (fullname, username, password, role) VALUES ('$fullname', '$username', '$password', '$role')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Registration successful! <a href='login.html'>Login here</a>";
+        echo json_encode(["status" => "success"]);
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo json_encode(["status" => "error", "message" => $conn->error]);
     }
 }
-$conn->close();
 ?>
