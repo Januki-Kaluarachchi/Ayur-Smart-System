@@ -5,7 +5,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #081c15 0%, #1b4332 100%);
+    background: linear-gradient(135deg, #081c15 0%, #55cb9a 100%);
     font-family: 'Segoe UI', 'Roboto', sans-serif;
     color: #d8f3dc;
     overflow: hidden;
