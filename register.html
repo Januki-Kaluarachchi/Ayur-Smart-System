@@ -10,7 +10,7 @@
 
     <div class="login-container">
         <h2>Create Account</h2>
-        <form action="register.php" method="POST">
+        <form id="regForm">
             <div class="input-group">
                 <label>Full Name</label>
                 <input type="text" name="fullname" placeholder="Enter your name" required>
@@ -39,6 +39,27 @@
 
     <script>
     
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            let formData = new FormData(this);
+
+            fetch('register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    alert("Registration Successful! Welcome to Ayur-Smart.");
+                    window.location.href = 'index.html'; 
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
