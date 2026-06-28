@@ -74,6 +74,16 @@ $result = $conn->query($sql);
         }
         ?>
     </div>
+    <div style="margin-top: 50px; padding: 30px; border-top: 1px solid #40916c; text-align: center;">
+    <a href="customer_dashboard.php" 
+       style="color: #d8f3dc; text-decoration: none; font-size: 1.1rem; margin-right: 30px; border: 1px solid #b7e4c7; padding: 10px 20px; border-radius: 10px;">
+       ⬅️ Dashboard එකට යන්න
+    </a>
+    <a href="logout.php" 
+       style="color: #ff6b6b; text-decoration: none; font-size: 1.1rem; border: 1px solid #ff6b6b; padding: 10px 20px; border-radius: 10px;">
+       🚪 Log Out වන්න
+    </a>
+</div>
     <script>
     function startVoiceSearch() {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
