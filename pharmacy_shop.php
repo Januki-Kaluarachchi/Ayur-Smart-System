@@ -7,17 +7,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     exit();
 }
 
-
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$cat = isset($_GET['cat']) ? $_GET['cat'] : null;
-
 
 $sql = "SELECT * FROM product WHERE 1=1";
 
 if (!empty($search)) {
-   
-    $sql .= " AND product_name LIKE '%" . $conn->real_escape_string($search) . "%'";
+    $sql .= " AND product_name COLLATE utf8mb4_unicode_ci LIKE '%" . $conn->real_escape_string($search) . "%'";
 }
+
 if (!empty($cat)) {
     $sql .= " AND category = '" . $conn->real_escape_string($cat) . "'";
 }
