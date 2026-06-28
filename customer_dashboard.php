@@ -11,29 +11,35 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     <meta charset="UTF-8">
     <title>Customer Portal | Ayur-Smart</title>
     <style>
-        body { margin: 0; padding: 0; overflow: hidden; background-color: #081c15; color: #d8f3dc; font-family: sans-serif; }
-
-        .header-nav { position: absolute; top: 20px; right: 40px; z-index: 10; }
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #081c15; color: #d8f3dc; font-family: 'Segoe UI', sans-serif; }
+        
+        .header-nav { position: absolute; top: 25px; right: 40px; z-index: 10; }
         .logout-btn { 
-            padding: 10px 25px; background-color: #d8f3dc; color: #081c15; 
-            border: none; border-radius: 20px; text-decoration: none; 
-            font-weight: bold; transition: 0.3s; cursor: pointer; 
+            padding: 15px 30px; background-color: #d8f3dc; color: #081c15; 
+            border: none; border-radius: 30px; text-decoration: none; 
+            font-weight: bold; font-size: 1.2rem; transition: 0.3s; cursor: pointer; 
         }
         .logout-btn:hover { background-color: #ff6b6b; color: white; }
 
-        .dashboard-container { position: relative; z-index: 1; text-align: center; margin-top: 80px; }
+        .dashboard-container { position: relative; z-index: 1; text-align: center; margin-top: 60px; }
         
-   
+        h1 { font-size: 3rem; margin-bottom: 10px; }
+        p { font-size: 1.5rem; margin-bottom: 40px; }
+        
+
         .service-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; padding: 20px; max-width: 900px; margin: 0 auto; 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 40px; padding: 20px; max-width: 1100px; margin: 0 auto; 
         }
         .service-card { 
-            background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; 
-            text-align: center; border: 1px solid #b7e4c7; color: #d8f3dc; 
-            text-decoration: none; transition: 0.3s; 
+            background: rgba(255, 255, 255, 0.08); padding: 50px; border-radius: 30px; 
+            text-align: center; border: 2px solid #b7e4c7; color: #d8f3dc; 
+            text-decoration: none; transition: 0.4s; 
         }
-        .service-card:hover { background: #2d6a4f; transform: scale(1.03); }
+        .service-card:hover { background: #2d6a4f; transform: scale(1.05); border-color: #ffffff; }
+        
+        .service-card h2 { font-size: 2.5rem; margin: 0; }
+        .service-card p { font-size: 1.8rem; margin-top: 10px; }
         
         #canvas { position: absolute; top: 0; left: 0; z-index: 0; }
     </style>
@@ -74,7 +80,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 15 + 10;
+                this.size = Math.random() * 20 + 15;
                 this.speedX = Math.random() * 1 - 0.5;
                 this.speedY = Math.random() * 1 + 0.5;
                 this.color = '#40916c';
@@ -93,7 +99,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
         }
 
         function init() {
-            for (let i = 0; i < 30; i++) particles.push(new Leaf());
+            for (let i = 0; i < 25; i++) particles.push(new Leaf());
         }
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
