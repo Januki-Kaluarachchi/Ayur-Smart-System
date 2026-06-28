@@ -1,4 +1,3 @@
-/* --- Global Styles --- */
 body {
     margin: 0;
     padding: 0;
@@ -6,16 +5,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: linear-gradient(135deg, #0b251a 0%, #1b4332 100%);
     font-family: 'Segoe UI', 'Roboto', sans-serif;
-    color: #f0fdf4; 
+    color: #f0fdf4;
+    overflow: hidden;
 }
 
-/* --- Animation Container --- */
 .animation-container {
     text-align: center;
     animation: fadeIn 1.2s ease-out;
+    position: relative;
+    z-index: 2;
 }
 
 .logo {
@@ -27,7 +27,7 @@ body {
     text-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-p {
+.animation-container p {
     font-size: 1.1rem;
     font-weight: 300;
     opacity: 0.8;
@@ -35,60 +35,71 @@ p {
     letter-spacing: 1px;
 }
 
-
 .login-container {
-    background: rgba(255, 255, 255, 0.05); 
-    padding: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    width: 380px;
+    width: 350px;
     text-align: center;
-    backdrop-filter: blur(15px); 
+    backdrop-filter: blur(15px);
+    z-index: 2;
 }
 
 .login-container h2 {
     color: #b7e4c7;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     font-weight: 400;
 }
 
-.input-group { margin-bottom: 25px; text-align: left; }
+.input-group { margin-bottom: 20px; text-align: left; }
 
 .input-group label {
     display: block;
     color: #a3c4a2;
     margin-bottom: 8px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
 }
 
 .input-group input {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.2);
     color: white;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
 button {
     background: #2d6a4f;
     border: none;
-    padding: 15px;
+    padding: 12px;
     width: 100%;
     border-radius: 10px;
     color: white;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
     background: #40916c;
-    box-shadow: 0 5px 15px rgb(50, 167, 114);
+    box-shadow: 0 5px 15px rgba(64, 145, 108, 0.6);
+}
+
+
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; 
+    pointer-events: none;
 }
 
 @keyframes fadeIn {
@@ -96,19 +107,14 @@ button:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.login-container p a {
+    color: #b7e4c7;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .login-container p a:hover {
     text-decoration: underline;
     color: #ffffff;
 }
-#canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1; 
-    pointer-events: none; 
-}
 
-.animation-container {
-    position: relative;
-    z-index: 2; 
-}
