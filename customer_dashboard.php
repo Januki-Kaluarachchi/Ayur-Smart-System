@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.html");
     exit();
@@ -10,43 +9,58 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Customer | Ayur-Smart</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Customer Portal | Ayur-Smart</title>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background-color: #081c15; color: #d8f3dc; font-family: sans-serif; }
-        .dashboard-container { position: relative; z-index: 1; text-align: center; margin-top: 50px; }
-        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 50px; justify-items: center; }
-        .service-card { background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid #b7e4c7; color: #d8f3dc; text-decoration: none; transition: 0.3s; width: 200px; }
-        .service-card:hover { background: #2d6a4f; transform: scale(1.05); }
+
+        .header-nav { position: absolute; top: 20px; right: 40px; z-index: 10; }
+        .logout-btn { 
+            padding: 10px 25px; background-color: #d8f3dc; color: #081c15; 
+            border: none; border-radius: 20px; text-decoration: none; 
+            font-weight: bold; transition: 0.3s; cursor: pointer; 
+        }
+        .logout-btn:hover { background-color: #ff6b6b; color: white; }
+
+        .dashboard-container { position: relative; z-index: 1; text-align: center; margin-top: 80px; }
+        
+   
+        .service-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; padding: 20px; max-width: 900px; margin: 0 auto; 
+        }
+        .service-card { 
+            background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; 
+            text-align: center; border: 1px solid #b7e4c7; color: #d8f3dc; 
+            text-decoration: none; transition: 0.3s; 
+        }
+        .service-card:hover { background: #2d6a4f; transform: scale(1.03); }
+        
         #canvas { position: absolute; top: 0; left: 0; z-index: 0; }
-        .logout-btn { display: inline-block; margin-top: 20px; padding: 12px 30px; background-color: #d8f3dc; color: #081c15; border: none; border-radius: 25px; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; }
-        .logout-btn:hover { background-color: #ff6b6b; color: white; transform: scale(1.05); }
     </style>
 </head>
 <body>
 
     <canvas id="canvas"></canvas>
 
+    <div class="header-nav">
+        <a href="logout.php" class="logout-btn">Logout (පිටවීම)</a>
+    </div>
+
     <div class="dashboard-container">
-        <h1>ආයුබෝවන්, <?php echo $_SESSION['username']; ?>!</h1>
+        <h1>ආයුබෝවන්, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
         <p>ඔබට අවශ්‍ය සේවාව තෝරන්න</p>
 
         <div class="service-grid">
             <a href="pharmacy_shop.php" class="service-card">
-                <h2>Pharmacy</h2>
-                <p>ඔසුසල</p>
+                <h2>Pharmacy</h2><p>ඔසුසල</p>
             </a>
             <a href="salon_therapy.php" class="service-card">
-                <h2>Salon</h2>
-                <p>සැලෝන් (Therapy)</p>
+                <h2>Salon</h2><p>සැලෝන් (Therapy)</p>
             </a>
             <a href="channeling_doctors.php" class="service-card">
-                <h2>Channeling</h2>
-                <p>වෛද්‍ය උපදෙස්</p>
+                <h2>Channeling</h2><p>වෛද්‍ය උපදෙස්</p>
             </a>
         </div>
-
-        <a href="logout.php" class="logout-btn">Logout (පිටවීම)</a>
     </div>
 
     <script>
