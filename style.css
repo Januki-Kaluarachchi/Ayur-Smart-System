@@ -9,6 +9,8 @@ body {
     font-family: 'Segoe UI', 'Roboto', sans-serif;
     color: #f0fdf4;
     overflow: hidden;
+    opacity: 1;
+    transition: opacity 1s ease;
 }
 
 .animation-container {
