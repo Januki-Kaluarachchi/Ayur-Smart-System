@@ -11,14 +11,17 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $cat = isset($_GET['cat']) ? $_GET['cat'] : null;
 
+
 $sql = "SELECT * FROM product WHERE 1=1";
 
-if ($search != '') {
-    $sql .= " AND product_name LIKE '%$search%'";
+if (!empty($search)) {
+   
+    $sql .= " AND product_name LIKE '%" . $conn->real_escape_string($search) . "%'";
 }
-if ($cat != null) {
-    $sql .= " AND category = '$cat'";
+if (!empty($cat)) {
+    $sql .= " AND category = '" . $conn->real_escape_string($cat) . "'";
 }
+
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -40,7 +43,8 @@ $result = $conn->query($sql);
     <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
     <div style="margin: 20px;">
         <form method="GET" action="pharmacy_shop.php">
-            <input type="text" name="search" id="search-input" value="<?php echo htmlspecialchars($search); ?>" placeholder="ඖෂධ හෝ පූජා ද්‍රව්‍ය සොයන්න..." 
+            <input type="text" name="search" id="search-input" value="<?php echo htmlspecialchars($search); ?>" 
+                   placeholder="ඖෂධ හෝ පූජා ද්‍රව්‍ය සොයන්න..." 
                    style="padding: 10px; width: 300px; border-radius: 10px; border: none;">
             <button type="submit" style="padding: 10px; cursor: pointer;">සොයන්න</button>
             <button type="button" onclick="startVoiceSearch()" style="padding: 10px; background: #40916c; color: white; border: none; border-radius: 10px;">🎤</button>
@@ -53,7 +57,7 @@ $result = $conn->query($sql);
     </div>
     <div class="products-grid">
         <?php
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 echo "<a href='product_detail.php?id=".$row['id']."' style='text-decoration:none; color:inherit;'>
                         <div class='product-card'>
@@ -65,7 +69,7 @@ $result = $conn->query($sql);
                       </a>";
             }
         } else {
-            echo "<p>සෙවුමට අදාළ ප්‍රතිඵල නොමැත.</p>";
+            echo "<div style='grid-column: 1/-1;'><h3>සෙවුමට අදාළ ප්‍රතිඵල නොමැත. කරුණාකර වෙනත් වචනයක් උත්සාහ කරන්න.</h3></div>";
         }
         ?>
     </div>
