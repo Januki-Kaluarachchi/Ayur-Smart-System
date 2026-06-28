@@ -2,10 +2,26 @@
 session_start();
 include 'db.php'; 
 
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$cat = isset($_GET['cat']) ? $_GET['cat'] : null;
+
+
+$sql = "SELECT * FROM product WHERE 1=1";
+
+if ($search) {
+    $sql .= " AND product_name LIKE '%$search%'";
+}
+if ($cat) {
+    $sql .= " AND category = '$cat'";
+}
+$result = $conn->query($sql);
+
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.html");
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="si">
@@ -24,6 +40,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 </head>
 <body>
     <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
+    <div style="margin: 20px;">
+    <form method="GET" action="pharmacy_shop.php">
+        <input type="text" name="search" id="search-input" placeholder="ඖෂධ හෝ පූජා ද්‍රව්‍ය සොයන්න..." 
+               style="padding: 10px; width: 300px; border-radius: 10px; border: none;">
+        <button type="submit" style="padding: 10px; cursor: pointer;">සොයන්න</button>
+        <button type="button" onclick="startVoiceSearch()" style="padding: 10px; background: #40916c; color: white; border: none; border-radius: 10px;">🎤</button>
+    </form>
+</div>
     <div class="filter-nav">
         <a href="pharmacy_shop.php">සියල්ල</a> | 
         <a href="pharmacy_shop.php?cat=Medicinal">ඖෂධ</a> | 
