@@ -17,10 +17,16 @@
     <canvas id="canvas"></canvas>
 
     <script>
+        setTimeout(function(){
         
+        document.body.style.transition = "opacity 1s ease";
+        document.body.style.opacity = "0";
+        
+       
         setTimeout(function(){
             window.location.href = 'login.html';
-        }, 3000);
+        }, 1000); 
+    }, 2000); 
 
         // Particle Animation
         const canvas = document.getElementById('canvas');
