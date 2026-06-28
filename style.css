@@ -5,7 +5,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #081c15 0%, #2a815d 100%);
+    background: linear-gradient(135deg, #081c15 0%, #276249 100%);
     font-family: 'Segoe UI', 'Roboto', sans-serif;
     color: #d8f3dc;
     overflow: hidden;
@@ -113,7 +113,7 @@ button:hover {
 }
 
 .login-container p a {
-    color: #2f4e3e;
+    color: #74c69d;
     text-decoration: none;
     font-weight: bold;
 }
