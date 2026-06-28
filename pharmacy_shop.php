@@ -2,26 +2,24 @@
 session_start();
 include 'db.php'; 
 
-
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$cat = isset($_GET['cat']) ? $_GET['cat'] : null;
-
-
-$sql = "SELECT * FROM product WHERE 1=1";
-
-if ($search) {
-    $sql .= " AND product_name LIKE '%$search%'";
-}
-if ($cat) {
-    $sql .= " AND category = '$cat'";
-}
-$result = $conn->query($sql);
-
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.html");
     exit();
 }
 
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$cat = isset($_GET['cat']) ? $_GET['cat'] : null;
+
+$sql = "SELECT * FROM product WHERE 1=1";
+
+if ($search != '') {
+    $sql .= " AND product_name LIKE '%$search%'";
+}
+if ($cat != null) {
+    $sql .= " AND category = '$cat'";
+}
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="si">
@@ -41,13 +39,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 <body>
     <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
     <div style="margin: 20px;">
-    <form method="GET" action="pharmacy_shop.php">
-        <input type="text" name="search" id="search-input" placeholder="ඖෂධ හෝ පූජා ද්‍රව්‍ය සොයන්න..." 
-               style="padding: 10px; width: 300px; border-radius: 10px; border: none;">
-        <button type="submit" style="padding: 10px; cursor: pointer;">සොයන්න</button>
-        <button type="button" onclick="startVoiceSearch()" style="padding: 10px; background: #40916c; color: white; border: none; border-radius: 10px;">🎤</button>
-    </form>
-</div>
+        <form method="GET" action="pharmacy_shop.php">
+            <input type="text" name="search" id="search-input" value="<?php echo htmlspecialchars($search); ?>" placeholder="ඖෂධ හෝ පූජා ද්‍රව්‍ය සොයන්න..." 
+                   style="padding: 10px; width: 300px; border-radius: 10px; border: none;">
+            <button type="submit" style="padding: 10px; cursor: pointer;">සොයන්න</button>
+            <button type="button" onclick="startVoiceSearch()" style="padding: 10px; background: #40916c; color: white; border: none; border-radius: 10px;">🎤</button>
+        </form>
+    </div>
     <div class="filter-nav">
         <a href="pharmacy_shop.php">සියල්ල</a> | 
         <a href="pharmacy_shop.php?cat=Medicinal">ඖෂධ</a> | 
@@ -55,13 +53,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     </div>
     <div class="products-grid">
         <?php
-        $cat = isset($_GET['cat']) ? $_GET['cat'] : null;
-        $sql = $cat ? "SELECT * FROM product WHERE category = '$cat'" : "SELECT * FROM product";
-        $result = $conn->query($sql);
-
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-               
                 echo "<a href='product_detail.php?id=".$row['id']."' style='text-decoration:none; color:inherit;'>
                         <div class='product-card'>
                             <img src='".$row['image_url']."' alt='".$row['product_name']."'>
@@ -71,22 +64,23 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
                         </div>
                       </a>";
             }
+        } else {
+            echo "<p>සෙවුමට අදාළ ප්‍රතිඵල නොමැත.</p>";
         }
         ?>
     </div>
     <script>
-function startVoiceSearch() {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'si-LK'; 
-    recognition.start();
+    function startVoiceSearch() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'si-LK'; 
+        recognition.start();
 
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('search-input').value = transcript;
-   
-        document.forms[0].submit();
-    };
-}
-</script>
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('search-input').value = transcript;
+            document.forms[0].submit();
+        };
+    }
+    </script>
 </body>
 </html>
