@@ -74,5 +74,19 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
         }
         ?>
     </div>
+    <script>
+function startVoiceSearch() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'si-LK'; 
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('search-input').value = transcript;
+   
+        document.forms[0].submit();
+    };
+}
+</script>
 </body>
 </html>
