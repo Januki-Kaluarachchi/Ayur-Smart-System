@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $row['username'];
         $_SESSION['role'] = $row['role'];
 
-        // Role එක අනුව dashboard එකට යවනවා
+       
         if ($row['role'] == 'admin') {
             header("Location: admin_dashboard.php");
         } elseif ($row['role'] == 'staff') {
