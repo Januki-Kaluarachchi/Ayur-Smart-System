@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Ayur-Smart-System</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Segoe UI', sans-serif; 
+            background: radial-gradient(circle at top, #0d2b24, #081c15); 
+            color: #d8f3dc; 
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(183, 228, 199, 0.3);
+            backdrop-filter: blur(10px);
+            width: 100%; max-width: 350px;
+            text-align: center;
+        }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #b7e4c7; }
+        input { 
+            width: 100%; padding: 12px; border-radius: 10px; border: none;
+            background: rgba(255, 255, 255, 0.1); color: white; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 12px; border-radius: 10px; border: none;
+            background: #40916c; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        button:hover { background: #52b788; }
+        .eye-icon {
+            position: absolute; right: 10px; top: 38px; cursor: pointer; color: #b7e4c7; user-select: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,18 +47,27 @@
                 <label>Username</label>
                 <input type="text" name="username" placeholder="Enter your username" required>
             </div>
-            <div class="input-group">
+            
+            <div class="input-group" style="position: relative;">
                 <label>Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
+                <input type="password" name="password" id="pass-input" placeholder="Enter your password" required>
+                <span class="eye-icon" onclick="togglePass()">👁️</span>
             </div>
+
             <button type="submit">Login</button>
 
-            <p style="margin-top: 20px; font-size: 0.9rem; color: #d8f3dc;">
-    Don't have an account? 
-    <a href="register.html" style="color: #b7e4c7; text-decoration: none; font-weight: bold;">Register here</a>
-</p>
+            <p style="margin-top: 20px; font-size: 0.9rem;">
+                Don't have an account? 
+                <a href="register.html" style="color: #b7e4c7; text-decoration: none; font-weight: bold;">Register here</a>
+            </p>
         </form>
     </div>
 
+    <script>
+        function togglePass() {
+            const input = document.getElementById("pass-input");
+            input.type = (input.type === "password") ? "text" : "password";
+        }
+    </script>
 </body>
 </html>
