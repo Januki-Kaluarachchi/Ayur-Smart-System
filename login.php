@@ -6,28 +6,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-
-    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT username, password, role FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['role'] = $row['role'];
 
-       
-        if ($row['role'] == 'admin') {
-            header("Location: admin_dashboard.php");
-        } elseif ($row['role'] == 'staff') {
-            header("Location: staff_dashboard.php");
-        } elseif ($row['role'] == 'customer') {
-            header("Location: customer_dashboard.php");
+        if (password_verify($password, $row['password'])) {
+            
+            $_SESSION['username'] = $row['username'];
+            $_SESSION['role'] = $row['role'];
+
+
+            if ($row['role'] == 'admin') {
+                header("Location: admin_dashboard.php");
+            } elseif ($row['role'] == 'staff') {
+                header("Location: staff_dashboard.php");
+            } else {
+                header("Location: customer_dashboard.php");
+            }
+            exit();
+            
         } else {
-            echo "<script>alert('Invalid Role!'); window.location='login.html';</script>";
+          
+            echo "<script>alert('Invalid Login Details!'); window.location='login.html';</script>";
         }
-        exit();
     } else {
+       
         echo "<script>alert('Invalid Login Details!'); window.location='login.html';</script>";
     }
+    
+    $stmt->close();
+    $conn->close();
 }
 ?>
