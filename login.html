@@ -1,64 +1,145 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Ayur-Smart-System</title>
+    <title>Login | Ayur-Smart System</title>
     <style>
-        body { 
-            margin: 0; padding: 0; 
-            font-family: 'Segoe UI', sans-serif; 
-            background: radial-gradient(circle at top, #0d2b24, #081c15); 
-            color: #d8f3dc; 
-            min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
+        :root {
+            --primary-color: #2d6a4f;
+            --accent-color: #b7e4c7;
+            --bg-dark: #081c15;
+            --text-light: #d8f3dc;
         }
-        .login-container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(183, 228, 199, 0.3);
-            backdrop-filter: blur(10px);
-            width: 100%; max-width: 350px;
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #081c15;
+            background-image: radial-gradient(circle at 50% 50%, #1b4332 0%, #081c15 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #b7e4c7; }
-        input { 
-            width: 100%; padding: 12px; border-radius: 10px; border: none;
-            background: rgba(255, 255, 255, 0.1); color: white; box-sizing: border-box;
+
+        .login-card h2 {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
-        button {
-            width: 100%; padding: 12px; border-radius: 10px; border: none;
-            background: #40916c; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative;
         }
-        button:hover { background: #52b788; }
+
+        .input-group label {
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: block;
+            opacity: 0.8;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 4px rgba(183, 228, 199, 0.1);
+        }
+
         .eye-icon {
-            position: absolute; right: 10px; top: 38px; cursor: pointer; color: #b7e4c7; user-select: none;
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            cursor: pointer;
+            color: var(--accent-color);
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+
+        .eye-icon:hover { opacity: 1; }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        button:hover {
+            background: #40916c;
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            margin-top: 25px;
+            color: rgba(216, 243, 220, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .footer-text a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="login-card">
         <h2>Ayur-Smart Login</h2>
         <form action="login.php" method="POST">
             <div class="input-group">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Enter your username" required>
+                <label>USERNAME</label>
+                <input type="text" name="username" placeholder="UserName" required>
             </div>
             
-            <div class="input-group" style="position: relative;">
-                <label>Password</label>
-                <input type="password" name="password" id="pass-input" placeholder="Enter your password" required>
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" name="password" id="pass-input" placeholder="password" required>
                 <span class="eye-icon" onclick="togglePass()">👁️</span>
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit">Sign In</button>
 
-            <p style="margin-top: 20px; font-size: 0.9rem;">
-                Don't have an account? 
-                <a href="register.html" style="color: #b7e4c7; text-decoration: none; font-weight: bold;">Register here</a>
+            <p class="footer-text">
+                Don't have an account? <a href="register.html">Register here</a>
             </p>
         </form>
     </div>
