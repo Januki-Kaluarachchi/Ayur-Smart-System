@@ -39,7 +39,7 @@ $row = $result->fetch_assoc();
         <p><?php echo $row['usage_instructions'] ? $row['usage_instructions'] : "වෛද්‍ය උපදෙස් පරිදි භාවිතා කරන්න."; ?></p>
         
         <br><br>
-        <a href="https://wa.me/94770000000?text=මම%20<?php echo $row['product_name']; ?>%20මිලදී%20ගැනීමට%20කැමතියි." 
+        <a href="https://wa.me/94769797635?text=මම%20<?php echo $row['product_name']; ?>%20මිලදී%20ගැනීමට%20කැමතියි." 
            class="btn-whatsapp" target="_blank">🛒 දැන්ම ඇණවුම් කරන්න</a>
     </div>
 </body>
