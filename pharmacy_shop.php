@@ -1,27 +1,38 @@
 <?php
 session_start();
-include 'db.php'; 
+include 'db.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.html");
     exit();
 }
-
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $cat = isset($_GET['cat']) ? $_GET['cat'] : null;
 
-
 $sql = "SELECT * FROM product WHERE 1=1";
+$params = [];
+$types = "";
 
 if (!empty($search)) {
-    $sql .= " AND product_name COLLATE utf8mb4_unicode_ci LIKE '%" . $conn->real_escape_string($search) . "%'";
+    $sql .= " AND product_name LIKE ?";
+    $params[] = "%" . $search . "%";
+    $types .= "s";
 }
 if (!empty($cat)) {
-    $sql .= " AND category = '" . $conn->real_escape_string($cat) . "'";
+    $sql .= " AND category = ?";
+    $params[] = $cat;
+    $types .= "s";
+}
+$stmt = $conn->prepare($sql);
+
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
 }
 
-$result = $conn->query($sql);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="si">
 <head>
