@@ -35,16 +35,16 @@ $therapy = isset($_GET['therapy']) ? $_GET['therapy'] : 'Service';
     <form action="save_salon_booking.php" method="POST">
         <input type="hidden" name="therapy_name" value="<?php echo htmlspecialchars($therapy); ?>">
         
-        <label>📅 දිනය (Date):</label>
+        <label> දිනය (Date):</label>
         <input type="date" name="date" required>
         
-        <label>⏰ වේලාව (Time):</label>
+        <label> වේලාව (Time):</label>
         <input type="time" name="time" required>
         
         <button type="submit">Confirm Booking / තහවුරු කරන්න</button>
     </form>
     
-    <a href="salon_therapy.php" class="back-link">⬅️ ආපසු යන්න</a>
+    <a href="salon_therapy.php" class="back-link">⬅ ආපසු යන්න</a>
 </div>
 
 </body>
