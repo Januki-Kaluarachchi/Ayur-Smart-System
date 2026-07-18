@@ -33,7 +33,7 @@ $doctor = $stmt->get_result()->fetch_assoc();
         <form action="save_appointment.php" method="POST">
             <input type="hidden" name="doctor_name" value="<?php echo htmlspecialchars($doctor['doctor_name']); ?>">
             
-            <label>Patient Name / රෝගියාගේ නම:</label>
+            <label>Patient Name / රෝගියාගේ නම:(Please enter your username)</label>
             <input type="text" name="patient_name" required>
             
             <label>Appointment Date / දිනය:</label>
