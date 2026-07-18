@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Database connection 
+include 'db.php'; 
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'doctor') {
     header("Location: login.html");
@@ -9,7 +9,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'doctor') {
 
 $doctor_name = $_SESSION['username'];
 
-// to get all appointments for the logged-in doctor, ordered by date
+
 $query = "SELECT * FROM appointments WHERE doctor_name = ? ORDER BY appointment_date ASC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $doctor_name);
@@ -29,18 +29,20 @@ $result = $stmt->get_result();
         th, td { padding: 15px; border: 1px solid #2d6a4f; text-align: left; }
         th { background: #1b4332; }
         .back-btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #2d6a4f; color: white; text-decoration: none; border-radius: 8px; }
+        .confirm-btn { background: #4CAF50; color: white; padding: 5px 12px; text-decoration: none; border-radius: 5px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Your Appointments</h2>
+        <h2>Appointments / හමුවීම් ලැයිස්තුව</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Patient Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
+                    <th>Patient / රෝගියා</th>
+                    <th>Date / දිනය</th>
+                    <th>Time / වේලාව</th>
+                    <th>Status / තත්ත්වය</th>
+                    <th>Action / ක්‍රියාමාර්ග</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +52,18 @@ $result = $stmt->get_result();
                     <td><?php echo htmlspecialchars($row['appointment_date']); ?></td>
                     <td><?php echo htmlspecialchars($row['appointment_time']); ?></td>
                     <td><?php echo htmlspecialchars($row['status']); ?></td>
+                    <td>
+                        <?php if($row['status'] == 'pending'): ?>
+                            <a href="confirm_appointment.php?id=<?php echo $row['id']; ?>" class="confirm-btn">Confirm</a>
+                        <?php else: ?>
+                            <span style="color: #74c69d;">Confirmed</span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-        <a href="doctor_dashboard.php" class="back-btn">Back to Dashboard</a>
+        <a href="doctor_dashboard.php" class="back-btn">Back to Dashboard / ඩෑෂ්බෝඩ් එකට යන්න</a>
     </div>
 </body>
 </html>
