@@ -31,7 +31,7 @@ $result = $conn->query($query);
                 <h3><?php echo htmlspecialchars($row['therapy_name']); ?></h3>
                 <p><?php echo htmlspecialchars($row['description']); ?></p>
                 <p><strong>Price / මිල:</strong> Rs. <?php echo htmlspecialchars($row['price']); ?></p>
-                <a href="#" class="btn">Book Now / වෙන් කරන්න</a>
+<a href="book_salon.php?therapy=<?php echo urlencode($row['therapy_name']); ?>" class="btn">Book Now / වෙන් කරන්න</a>
             </div>
         <?php endwhile; ?>
         <br><a href="customer_dashboard.php" style="color: #b7e4c7;">Back to Dashboard / ඩෑෂ්බෝඩ් එකට යන්න</a>
