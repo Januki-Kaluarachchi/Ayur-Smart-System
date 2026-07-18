@@ -122,20 +122,3 @@ button:hover {
     text-decoration: underline;
     color: #ffffff;
 }
-.btn-dashboard {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #2d6a4f;
-    color: #d8f3dc;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    border: 1px solid #40916c;
-    transition: 0.3s;
-    margin-bottom: 20px;
-}
-.btn-dashboard:hover {
-    background-color: #40916c;
-    color: white;
-    transform: translateY(-2px);
-}
