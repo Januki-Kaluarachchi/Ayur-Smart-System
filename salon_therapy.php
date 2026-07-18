@@ -36,5 +36,10 @@ $result = $conn->query($query);
         <?php endwhile; ?>
         <br><a href="customer_dashboard.php" style="color: #b7e4c7;">Back to Dashboard / ඩෑෂ්බෝඩ් එකට යන්න</a>
     </div>
+    <div style="text-align: center; margin-bottom: 20px;">
+    <a href="my_appointments.php" style="background-color: #40916c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+        📅 මගේ හමුවීම් බලන්න (My Appointments)
+    </a>
+</div>
 </body>
 </html>
