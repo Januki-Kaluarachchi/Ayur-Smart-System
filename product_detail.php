@@ -120,7 +120,7 @@ $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
                 
                 <div style="margin-top: 15px; border-top: 1px dashed #40916c; padding-top: 15px;">
                     <a href="https://wa.me/94769797635?text=මම%20<?php echo urlencode($row['product_name']); ?>%20මිලදී%20ගැනීමට%20කැමතියි." 
-                       class="btn-whatsapp" target="_blank">💬 Direct WhatsApp Inquiry</a>
+                       class="btn-whatsapp" target="_blank">💬  BUY (Whatsapp) </a>
                 </div>
             </div>
         </div>
