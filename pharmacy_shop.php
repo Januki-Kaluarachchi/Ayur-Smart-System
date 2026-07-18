@@ -51,10 +51,17 @@ $result = $stmt->get_result();
 </head>
 <body>
 
-    <div class="header-container">
-        <div style="width: 200px;"></div> <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
+   <div class="header-container">
         <div style="display: flex; gap: 10px;">
             <a href="customer_dashboard.php" style="color: #b7e4c7; text-decoration: none; border: 1px solid #b7e4c7; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem;">⬅️ Dashboard</a>
+        </div>
+        
+        <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
+        
+        <div style="display: flex; gap: 10px;">
+            <a href="cart.php" style="color: #ffffff; text-decoration: none; border: 1px solid #40916c; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem; background-color: #40916c;">
+                🛒 View Cart
+            </a>
             <a href="logout.php" style="color: #ff6b6b; text-decoration: none; border: 1px solid #ff6b6b; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem;">🚪 Log Out</a>
         </div>
     </div>
