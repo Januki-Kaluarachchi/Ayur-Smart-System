@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration - Ayur-Smart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container { max-width: 500px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 20px; color: white; }
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; }
+        button { width: 100%; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Doctor Registration</h2>
+        <form id="docRegForm">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" name="doctor_name" required>
+            </div>
+            <div class="input-group">
+                <label>Specialization</label>
+                <input type="text" name="specialization" required>
+            </div>
+            <div class="input-group">
+                <label>Schedule (e.g., Mon-Fri 9am-5pm)</label>
+                <input type="text" name="schedule" required>
+            </div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <label>Medical License ID (MBBS/SLMC)</label>
+                <input type="text" name="medical_license_id" required>
+            </div>
+            <button type="submit">Submit for Approval</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('docRegForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            fetch('doctor_register_process.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    alert("Registration submitted! Admin will verify your profile.");
+                    window.location.href = 'login.html'; 
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
