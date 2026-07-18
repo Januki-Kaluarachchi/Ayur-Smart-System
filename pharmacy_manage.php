@@ -32,6 +32,23 @@ if (isset($_POST['add_product'])) {
         .form-box { background: #081c15; padding: 20px; border: 1px solid #40916c; border-radius: 10px; margin-bottom: 20px; }
         input { padding: 10px; border-radius: 5px; border: 1px solid #40916c; background: #1b4332; color: white; }
         button { padding: 10px 20px; background: #40916c; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-dashboard {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2d6a4f;
+    color: #d8f3dc;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    border: 1px solid #40916c;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+.btn-dashboard:hover {
+    background-color: #40916c;
+    color: white;
+    transform: translateY(-2px);
+}
     </style>
 </head>
 <body>
