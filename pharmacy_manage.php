@@ -36,7 +36,7 @@ if (isset($_POST['add_product'])) {
 </head>
 <body>
     <h2>💊 ඖෂධ කළමනාකරණය</h2>
-    <a href="staff_dashboard.php" style="color: #74c69d;">⬅️ Back to Dashboard</a>
+    <a href="staff_dashboard.php" class="btn-dashboard"> Back to Dashboard</a>
 
 
     <div class="form-box">
