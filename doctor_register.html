@@ -6,10 +6,37 @@
     <title>Doctor Registration - Ayur-Smart</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-container { max-width: 500px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 20px; color: white; }
+        .login-container { 
+            max-width: 500px; 
+            margin: 50px auto; 
+            padding: 30px; 
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; 
+            color: white; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
         .input-group { margin-bottom: 15px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; }
-        button { width: 100%; padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border-radius: 5px; 
+            border: none; 
+            box-sizing: border-box; 
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        button:hover { background: #45a049; }
     </style>
 </head>
 <body>
@@ -26,13 +53,13 @@
                 <input type="text" name="specialization" required>
             </div>
             <div class="input-group">
-      <label>Available Date</label>
-    <input type="date" name="schedule_date" required>
-     </div>
-   <div class="input-group">
-    <label>Available Time</label>
-    <input type="time" name="schedule_time" required>
-       </div>
+                <label>Available Date</label>
+                <input type="date" name="schedule_date" required>
+            </div>
+            <div class="input-group">
+                <label>Available Time</label>
+                <input type="time" name="schedule_time" required>
+            </div>
             <div class="input-group">
                 <label>Username</label>
                 <input type="text" name="username" required>
@@ -51,7 +78,7 @@
 
     <script>
         document.getElementById('docRegForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); 
             let formData = new FormData(this);
 
             fetch('doctor_register_process.php', {
@@ -67,7 +94,10 @@
                     alert("Error: " + data.message);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred. Please try again.");
+            });
         });
     </script>
 </body>
