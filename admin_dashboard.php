@@ -70,6 +70,18 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         <a href="logout.php">
             <div class="card logout-card"><div class="logout-text">🚪</div><h3 class="logout-text">Logout</h3></div>
         </a>
+        <a href="manage_doctors.php">
+    <div class="card">
+        <div>🩺</div>
+        <h3>Doctor Requests</h3>
+        <?php
+        include 'db.php';
+        $pending = $conn->query("SELECT COUNT(*) as total FROM doctors WHERE status = 'pending'");
+        $data = $pending->fetch_assoc();
+        echo "<small>Pending: " . $data['total'] . "</small>";
+        ?>
+    </div>
+</a>
     </div>
 
 </body>
