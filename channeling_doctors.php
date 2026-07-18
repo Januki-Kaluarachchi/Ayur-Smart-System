@@ -51,7 +51,14 @@ $result = $conn->query($query);
                 </a>
             </div>
         <?php endwhile; ?>
-        <br><a href="customer_dashboard.php" style="color: #b7e4c7;">Back to Dashboard</a>
+        <br><div style="margin-top: 20px;">
+    <a href="customer_appointments.php" style="background: #2d6a4f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">
+        View My Appointments / මගේ හමුවීම් බලන්න
+    </a>
+    <a href="customer_dashboard.php" style="color: #b7e4c7; text-decoration: underline;">
+        Back to Dashboard / ඩෑෂ්බෝඩ් එකට යන්න
+    </a>
+</div>
     </div>
 </body>
 </html>
