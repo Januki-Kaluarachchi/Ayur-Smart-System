@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Ayur-Smart</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .supplier-fields { display: none; }
+    </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="login-container" style="max-width: 450px;">
         <h2>Create Account</h2>
         <form id="regForm">
             <div class="input-group">
@@ -25,15 +28,35 @@
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Create a password" required>
             </div>
+
+            <div class="input-group">
+                <label>Register As</label>
+                <select name="role" id="roleSelect" required style="width: 100%; padding: 10px; border-radius: 5px; background: #1b4332; color: white; border: 1px solid #40916c;" onchange="toggleSupplierFields()">
+                    <option value="customer">Customer</option>
+                    <option value="supplier">Supplier</option>
+                </select>
+            </div>
+
+         
+            <div id="supplierFields" class="supplier-fields">
+                <div class="input-group">
+                    <label>Company Name</label>
+                    <input type="text" name="company_name" placeholder="Enter company name">
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone_number" placeholder="Enter phone number">
+                </div>
+                <div class="input-group">
+                    <label>Address</label>
+                    <textarea name="address" placeholder="Enter company address" style="width: 100%; padding: 10px; border-radius: 5px; background: #1b4332; color: white; border: 1px solid #40916c; resize: vertical;"></textarea>
+                </div>
+            </div>
             
-            <button type="submit">Register</button>
+            <button type="submit" style="margin-top: 15px;">Register</button>
         </form>
 
-<p style="margin-top: 15px; text-align: center;">
-    Are you a doctor? 
-    <a href="doctor_register.html" style="color: #4CAF50; font-weight: bold;">Register as a Doctor</a>
-</p>
-        <p style="margin-top: 20px; font-size: 0.9rem;">
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center;">
             Already have an account? 
             <a href="login.html">Login here</a>
         </p>
@@ -42,7 +65,16 @@
     <canvas id="canvas"></canvas>
 
     <script>
-    
+        function toggleSupplierFields() {
+            const role = document.getElementById('roleSelect').value;
+            const supplierFields = document.getElementById('supplierFields');
+            if (role === 'supplier') {
+                supplierFields.style.display = 'block';
+            } else {
+                supplierFields.style.display = 'none';
+            }
+        }
+
         document.getElementById('regForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
 
@@ -56,7 +88,7 @@
             .then(data => {
                 if(data.status === "success") {
                     alert("Registration Successful! Welcome to Ayur-Smart.");
-                    window.location.href = 'index.html'; 
+                    window.location.href = 'login.html'; 
                 } else {
                     alert("Error: " + data.message);
                 }
