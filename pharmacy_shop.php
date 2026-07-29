@@ -59,11 +59,13 @@ $result = $stmt->get_result();
         <h1>ඖෂධ සහ පූජා ද්‍රව්‍ය අංශය</h1>
         
         <div style="display: flex; gap: 10px;">
-            <a href="cart.php" style="color: #ffffff; text-decoration: none; border: 1px solid #40916c; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem; background-color: #40916c;">
-                🛒 View Cart
-            </a>
             <a href="logout.php" style="color: #ff6b6b; text-decoration: none; border: 1px solid #ff6b6b; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem;">🚪 Log Out</a>
         </div>
+
+        <div style="display: flex; gap: 10px;">
+    <a href="cart.php" class="btn" style="background: #2d6a4f; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">View Cart</a>
+    <a href="my_orders.php" class="btn" style="background: #40916c; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">📦 My Orders</a>
+       </div>
     </div>
 
     <div style="margin: 20px;">
