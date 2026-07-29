@@ -67,6 +67,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
                 <h2>Channeling</h2><p>වෛද්‍ය උපදෙස්</p>
             </a>
         </div>
+      
+       <div style="text-align: center; margin-top: 30px;">
+      <a href="https://wa.me/94710665979?text=Hello%20Ayur-Smart,%20I%20want%20to%20upload%20my%20prescription%20for%20medicine." 
+       target="_blank" 
+       style="background-color: #25D366; color: white; padding: 12px 25px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 30px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;">
+        <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Upload Prescription (WhatsApp)
+    </a>
+     </div>
     </div>
 
     <script>
