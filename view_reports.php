@@ -52,6 +52,18 @@ $pending_product_count = $conn->query("SELECT COUNT(*) as count FROM pending_pro
                 <h3>Pending Products</h3>
                 <p><?php echo $pending_product_count; ?></p>
             </div>
+
+         
+         <div class="report-card" style="background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; padding: 20px; border-radius: 15px; text-align: center; width: 250px; display: inline-block; margin: 10px;">
+    <h3 style="color: #ff6b6b; margin-bottom: 10px;">Expiring in 10 Days</h3>
+    <?php
+      
+        $expiry_check = $conn->query("SELECT COUNT(*) as total FROM product WHERE expiry_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 10 DAY)");
+        $expiry_data = $expiry_check->fetch_assoc();
+    ?>
+    <p style="font-size: 2rem; font-weight: bold; color: #ff6b6b;"><?php echo $expiry_data['total']; ?></p>
+    <a href="expiring_products.php" style="background: #ff6b6b; color: white; padding: 8px 15px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 10px;">View Report ➔</a>
+          </div>
         </div>
     </div>
 </body>
