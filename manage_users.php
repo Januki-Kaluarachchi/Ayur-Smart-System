@@ -7,118 +7,83 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.html");
     exit();
 }
-
-if (isset($_GET['delete_id'])) {
-    $id = intval($_GET['delete_id']);
-    $conn->query("DELETE FROM suppliers WHERE user_id = $id");
-    $conn->query("DELETE FROM users WHERE id = $id");
-    header("Location: manage_users.php");
-    exit();
-}
-
-$tab = isset($_GET['tab']) ? $_GET['tab'] : 'customers';
+$sql = "SELECT * FROM users WHERE role = 'customer'";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <title>Manage Users - Ayur-Smart</title>
     <style>
-        body { background: #081c15; color: #d8f3dc; font-family: sans-serif; padding: 30px; }
-        .container { max-width: 1000px; margin: auto; }
-        .btn-group { margin-bottom: 20px; }
-        .btn { background: #1b4332; color: #d8f3dc; padding: 10px 20px; text-decoration: none; border-radius: 5px; border: 1px solid #40916c; font-weight: bold; margin-right: 10px; }
-        .btn.active { background: #40916c; color: white; }
-        .card { background: #1b4332; padding: 20px; border-radius: 10px; border: 1px solid #40916c; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #40916c; padding: 12px; text-align: left; }
-        th { background: #2d6a4f; }
-        .action-btn { padding: 6px 12px; border-radius: 4px; text-decoration: none; color: white; font-size: 0.85rem; margin-right: 5px; }
-        .edit-btn { background: #0077b6; }
-        .delete-btn { background: #d90429; }
-        .back-btn { background: #555; display: inline-block; margin-bottom: 20px; }
+        body { background-color: #081c15; color: #d8f3dc; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 30px; }
+        .nav-container { display: flex; justify-content: flex-start; max-width: 1000px; margin: 0 auto 20px auto; }
+        .btn-back { color: #b7e4c7; text-decoration: none; border: 1px solid #b7e4c7; padding: 8px 15px; border-radius: 8px; background: rgba(255,255,255,0.05); font-weight: bold; }
+        
+        h1 { margin-bottom: 20px; }
+        
+        .tab-container { margin-bottom: 20px; }
+        .tab-btn { background: #40916c; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 0 5px; }
+        
+        .table-container { max-width: 1000px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #40916c; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid rgba(183, 228, 199, 0.2); }
+        th { color: #b7e4c7; font-size: 1.1rem; }
+        td { color: #d8f3dc; }
+        
+        .btn-edit { background: #0077b6; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold; margin-right: 5px; }
+        .btn-delete { background: #d90429; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
+        .btn-orders { background: #e85d04; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold; margin-right: 5px; display: inline-block; }
+        .btn-orders:hover { background: #dc2f02; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="admin_dashboard.php" class="btn back-btn">⬅️ Back to Dashboard</a>
-        <h2>Manage Users 👥</h2>
-        
-        <!-- Tab Buttons for Customers and Suppliers -->
-        <div class="btn-group">
-            <a href="manage_users.php?tab=customers" class="btn <?php echo ($tab == 'customers') ? 'active' : ''; ?>">Manage Customers</a>
-            <a href="manage_users.php?tab=suppliers" class="btn <?php echo ($tab == 'suppliers') ? 'active' : ''; ?>">Manage Suppliers</a>
-        </div>
 
-        <div class="card">
-            <?php if ($tab == 'customers'): ?>
-                <h3>Customer List</h3>
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php
-                    $result = $conn->query("SELECT * FROM users WHERE role = 'customer'");
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                <td>{$row['id']}</td>
-                                <td>{$row['fullname']}</td>
-                                <td>{$row['username']}</td>
-                                <td>
-                                    <a href='edit_user.php?id={$row['id']}' class='action-btn edit-btn'>Edit</a>
-                                    <a href='manage_users.php?delete_id={$row['id']}&tab=customers' class='action-btn delete-btn' onclick='return confirm(\"Are you sure you want to delete this customer?\")'>Delete</a>
-                                </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4' style='text-align: center; color: #74c69d;'>No customers found.</td></tr>";
-                    }
-                    ?>
-                </table>
-
-            <?php elseif ($tab == 'suppliers'): ?>
-                <h3>Supplier List</h3>
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Company Name</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php
-                    $supplier_query = "SELECT users.id, users.fullname, users.username, suppliers.company_name, suppliers.phone_number 
-                                       FROM users 
-                                       JOIN suppliers ON users.id = suppliers.user_id 
-                                       WHERE users.role = 'supplier'";
-                    $sup_result = $conn->query($supplier_query);
-                    if ($sup_result && $sup_result->num_rows > 0) {
-                        while ($row = $sup_result->fetch_assoc()) {
-                            echo "<tr>
-                                <td>{$row['id']}</td>
-                                <td>{$row['fullname']}</td>
-                                <td>{$row['username']}</td>
-                                <td>{$row['company_name']}</td>
-                                <td>{$row['phone_number']}</td>
-                                <td>
-                                    <a href='edit_supplier.php?id={$row['id']}' class='action-btn edit-btn'>Edit</a>
-                                    <a href='manage_users.php?delete_id={$row['id']}&tab=suppliers' class='action-btn delete-btn' onclick='return confirm(\"Are you sure you want to delete this supplier?\")'>Delete</a>
-                                </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='6' style='text-align: center; color: #74c69d;'>No suppliers found.</td></tr>";
-                    }
-                    ?>
-                </table>
-            <?php endif; ?>
-        </div>
+    <div class="nav-container">
+        <a href="admin_dashboard.php" class="btn-back">⬅️ Back to Dashboard</a>
     </div>
+
+    <h1>Manage Users 👥</h1>
+
+    <div class="tab-container">
+        <a href="manage_users.php" class="tab-btn">Manage Customers</a>
+        <a href="manage_suppliers.php" class="tab-btn" style="background: rgba(255,255,255,0.1);">Manage Suppliers</a>
+    </div>
+
+    <div class="table-container">
+        <h2 style="text-align: left; color: #b7e4c7; margin-top: 0;">Customer List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($result && $result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>".$row['id']."</td>
+                                <td>".htmlspecialchars($row['username'])."</td>
+                                <td>".htmlspecialchars($row['username'])."</td>
+                                <td>
+                                    <a href='customer_orders.php?user_id=".$row['id']."' class='btn-orders'>📦 Orders</a>
+                                    <a href='edit_user.php?id=".$row['id']."' class='btn-edit'>Edit</a>
+                                    <a href='delete_user.php?id=".$row['id']."' class='btn-delete' onclick='return confirm(\"Are you sure?\")'>Delete</a>
+                                </td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4' style='text-align: center; padding: 20px;'>NO CUSTOMERS FOUND.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+
 </body>
 </html>
