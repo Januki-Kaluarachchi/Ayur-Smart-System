@@ -8,6 +8,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
 }
 
 $username = $_SESSION['username'];
+
 $user_query = $conn->prepare("SELECT id FROM users WHERE username = ?");
 $user_query->bind_param("s", $username);
 $user_query->execute();
@@ -85,6 +86,8 @@ $result = $stmt->get_result();
                 <?php
                 if ($result && $result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
+                        
+                        $order_date = isset($row['order_date']) ? $row['order_date'] : (isset($row['date']) ? $row['date'] : 'N/A');
                         $wa_text = "මම Order ID #" . $row['id'] . " යටතේ " . $row['product_name'] . " (ප්‍රමාණය: " . $row['quantity'] . ") ඇණවුම් කළෙමි. මුළු මිල: Rs. " . $row['total_price'];
                         $wa_url = "https://wa.me/94710665979?text=" . urlencode($wa_text);
 
@@ -94,7 +97,7 @@ $result = $stmt->get_result();
                                 <td>Rs. ".number_format($row['price'], 2)."</td>
                                 <td>".$row['quantity']."</td>
                                 <td>Rs. ".number_format($row['total_price'], 2)."</td>
-                                <td>".$row['date']."</td>
+                                <td>".$order_date."</td>
                                 <td class='status-pending'>".$row['status']."</td>
                                 <td>
                                     <a href='".$wa_url."' class='btn-whatsapp' target='_blank'>💬 WhatsApp</a>
