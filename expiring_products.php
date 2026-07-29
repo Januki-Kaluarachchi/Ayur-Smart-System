@@ -34,14 +34,14 @@ $result = $conn->query($sql);
     <a href="view_reports.php" class="btn-back">⬅️ Back to Reports</a>
     
     <h2>⚠️ Products Expiring in Next 10 Days</h2>
-    <p style="color: #a5c4d4;">Expire Products List </p>
+    <p style="color: #a5c4d4;">අද දින සිට ඉදිරියට දින 10 ක් ඇතුළත කල් ඉකුත් වීමට නියමිත ඖෂධ සහ භාණ්ඩ ලැයිස්තුව.</p>
 
     <?php if ($result->num_rows > 0): ?>
         <table>
             <tr>
                 <th>Product Name</th>
                 <th>Category</th>
-                <th>Stock Count</th>
+                <th>Stock Quantity</th>
                 <th>Expiry Date</th>
                 <th>Status</th>
             </tr>
@@ -49,10 +49,11 @@ $result = $conn->query($sql);
             <tr>
                 <td><?php echo htmlspecialchars($row['product_name']); ?></td>
                 <td><?php echo htmlspecialchars($row['category']); ?></td>
-                <td><?php echo htmlspecialchars($row['stock_count']); ?></td>
+                <td><?php echo htmlspecialchars($row['stock_quantity']); ?></td>
                 <td style="color: #ff6b6b; font-weight: bold;"><?php echo htmlspecialchars($row['expiry_date']); ?></td>
                 <td><span class="badge">Expiring Soon</span></td>
             </tr>
+            <?php endfor; // Fixed missing loop close tag as well ?>
             <?php endwhile; ?>
         </table>
     <?php else: ?>
