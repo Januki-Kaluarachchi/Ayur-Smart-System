@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
     $username = $_SESSION['username'];
     
-
+   
     $user_query = $conn->prepare("SELECT id FROM users WHERE username = ?");
     $user_query->bind_param("s", $username);
     $user_query->execute();
@@ -44,8 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
     $total_price = $price * $quantity;
     $status = 'Pending';
 
-   
-    entropy:
+
     $order_stmt = $conn->prepare("INSERT INTO orders (user_id, product_name, price, quantity, total_price, status) VALUES (?, ?, ?, ?, ?, ?)");
     $order_stmt->bind_param("isdids", $user_id, $product_name, $price, $quantity, $total_price, $status);
     
@@ -56,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
         
        
         echo "<script>
-                // WhatsApp එකට Order විස්තර යැවීමට ලෑස්ති කිරීම (අවශ්‍ය නම් පමණි, නැතහොත් කෙලින්ම my_orders වෙත යා හැක)
                 window.open('https://wa.me/94710665979?text=මම%20$product_encoded%20භාණ්ඩය%20ප්‍රමාණය%20$qty_encoded%20ක්%20මිලදී%20ගැනීමට%20ඇණවුම්%20කළෙමි.%20මුළු%20මිල:%20LKR%20$total_encoded', '_blank');
                 window.location.href = 'my_orders.php';
               </script>";
@@ -118,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
             <div class="cart-section">
                 <form method="POST" action="product_detail.php?id=<?php echo $id; ?>">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                        <label style="font-size: 1.1rem; font-weight: bold;">Quantity:</label>
+                        <label style="font-size: 1.1rem; font-weight: bold;">(Qty):</label>
                         <input type="number" name="quantity" class="qty-input" value="1" min="1">
                     </div>
                     <button type="submit" name="place_order" class="btn-buy">💬 BUY (WhatsApp & Place Order)</button>
