@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = isset($_POST['role']) ? $_POST['role'] : 'customer'; 
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
+    
     $conn->begin_transaction();
 
     try {
