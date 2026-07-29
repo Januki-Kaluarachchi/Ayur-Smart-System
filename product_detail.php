@@ -25,11 +25,10 @@ if (isset($_GET['id'])) {
     exit();
 }
 
-
+//  Direct WhatsApp Order 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
     $username = $_SESSION['username'];
     
-   
     $user_query = $conn->prepare("SELECT id FROM users WHERE username = ?");
     $user_query->bind_param("s", $username);
     $user_query->execute();
@@ -44,7 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
     $total_price = $price * $quantity;
     $status = 'Pending';
 
-
     $order_stmt = $conn->prepare("INSERT INTO orders (user_id, product_name, price, quantity, total_price, status) VALUES (?, ?, ?, ?, ?, ?)");
     $order_stmt->bind_param("isdids", $user_id, $product_name, $price, $quantity, $total_price, $status);
     
@@ -53,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
         $qty_encoded = urlencode($quantity);
         $total_encoded = urlencode($total_price);
         
-       
         echo "<script>
                 window.open('https://wa.me/94710665979?text=මම%20$product_encoded%20භාණ්ඩය%20ප්‍රමාණය%20$qty_encoded%20ක්%20මිලදී%20ගැනීමට%20ඇණවුම්%20කළෙමි.%20මුළු%20මිල:%20LKR%20$total_encoded', '_blank');
                 window.location.href = 'my_orders.php';
@@ -62,6 +59,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
     } else {
         $error_msg = "Order failed: " . $conn->error;
     }
+}
+
+// Add to Cart 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
+    $product_id = $row['id'];
+    $product_name = $row['product_name'];
+    $price = $row['price'];
+    $quantity = intval($_POST['quantity']);
+    if ($quantity < 1) { $quantity = 1; }
+
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id]['quantity'] += $quantity;
+    } else {
+        $_SESSION['cart'][$product_id] = [
+            'name' => $product_name,
+            'price' => $price,
+            'quantity' => $quantity
+        ];
+    }
+
+    header("Location: cart.php");
+    exit();
 }
 ?>
 
@@ -81,18 +104,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
         
         .cart-section { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #40916c; margin-top: 20px; text-align: center; }
         .qty-input { padding: 10px; width: 80px; border-radius: 8px; border: none; font-size: 1.1rem; text-align: center; }
+        
         .btn-buy { background: #25d366; color: white; padding: 14px 25px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 15px; }
         .btn-buy:hover { background: #128c7e; }
+
+        .btn-cart { background: #2b7a78; color: white; padding: 10px 20px; border-radius: 8px; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .btn-cart:hover { background: #3aafa9; }
+
         .btn-back { color: #b7e4c7; text-decoration: none; border: 1px solid #b7e4c7; padding: 8px 15px; border-radius: 8px; }
+        .action-row { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
 
     <div class="nav-container">
         <a href="pharmacy_shop.php" class="btn-back">⬅️ Back to Shop </a>
-        <a href="my_orders.php" style="color: #b7e4c7; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;">
-            📦 My Orders
-        </a>
+        <div style="display: flex; gap: 15px;">
+            <a href="cart.php" style="color: #66fcf1; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;">
+                🛒 View Cart
+            </a>
+            <a href="my_orders.php" style="color: #b7e4c7; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;">
+                📦 My Orders
+            </a>
+        </div>
     </div>
 
     <?php if (isset($error_msg)) { echo "<p style='color: #ff6b6b; text-align:center;'>$error_msg</p>"; } ?>
@@ -115,10 +149,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
             
             <div class="cart-section">
                 <form method="POST" action="product_detail.php?id=<?php echo $id; ?>">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                        <label style="font-size: 1.1rem; font-weight: bold;">(Qty):</label>
+                 
+                    <div class="action-row">
+                        <label style="font-size: 1.1rem; font-weight: bold;">QTY:</label>
                         <input type="number" name="quantity" class="qty-input" value="1" min="1">
+                        
+                        <button type="submit" name="add_to_cart" class="btn-cart">🛒 Add to Cart</button>
                     </div>
+
                     <button type="submit" name="place_order" class="btn-buy">💬 BUY (WhatsApp & Place Order)</button>
                 </form>
             </div>
