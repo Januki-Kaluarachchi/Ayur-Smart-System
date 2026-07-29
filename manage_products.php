@@ -2,17 +2,14 @@
 session_start();
 include 'db.php';
 
-
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.html");
     exit();
 }
 
-
 if (isset($_GET['approve_id'])) {
     $id = intval($_GET['approve_id']);
     
-
     $result = $conn->query("SELECT * FROM pending_products WHERE id = $id");
     if ($result->num_rows > 0) {
         $prod = $result->fetch_assoc();
@@ -22,18 +19,15 @@ if (isset($_GET['approve_id'])) {
         $qty = $prod['stock_quantity'];
         $image = $prod['product_image'];
 
-   
         $stmt = $conn->prepare("INSERT INTO product (product_name, description, price, stock_quantity, product_image) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("ssdis", $name, $desc, $price, $qty, $image);
         $stmt->execute();
 
-       
         $conn->query("DELETE FROM pending_products WHERE id = $id");
     }
     header("Location: manage_products.php");
     exit();
 }
-
 
 if (isset($_GET['delete_id'])) {
     $id = intval($_GET['delete_id']);
