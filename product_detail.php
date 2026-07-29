@@ -2,39 +2,10 @@
 session_start();
 include 'db.php';
 
-
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'customer') {
     header("Location: login.html");
     exit();
 }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_to_cart'])) {
-    $product_id = intval($_POST['product_id']);
-    $quantity = intval($_POST['quantity']);
-    
-    if ($quantity < 1) {
-        $quantity = 1;
-    }
-
-  
-    if (!isset($_SESSION['cart'])) {
-        $_SESSION['cart'] = array();
-    }
-
-   
-    if (isset($_SESSION['cart'][$product_id])) {
-        $_SESSION['cart'][$product_id] += $quantity;
-    } else {
-        $_SESSION['cart'][$product_id] = $quantity;
-    }
-
-    echo "<script>
-            alert('භාණ්ඩය සාර්ථකව කාර්ට් එකට එක් කරන ලදී! / Product added to cart!');
-            window.location='pharmacy_shop.php';
-          </script>";
-    exit();
-}
-
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -55,7 +26,45 @@ if (isset($_GET['id'])) {
 }
 
 
-$cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['place_order'])) {
+    $username = $_SESSION['username'];
+    
+
+    $user_query = $conn->prepare("SELECT id FROM users WHERE username = ?");
+    $user_query->bind_param("s", $username);
+    $user_query->execute();
+    $user_result = $user_query->get_result();
+    $user_data = $user_result->fetch_assoc();
+    $user_id = $user_data['id'];
+
+    $product_name = $row['product_name'];
+    $price = $row['price'];
+    $quantity = intval($_POST['quantity']);
+    if ($quantity < 1) { $quantity = 1; }
+    $total_price = $price * $quantity;
+    $status = 'Pending';
+
+   
+    entropy:
+    $order_stmt = $conn->prepare("INSERT INTO orders (user_id, product_name, price, quantity, total_price, status) VALUES (?, ?, ?, ?, ?, ?)");
+    $order_stmt->bind_param("isdids", $user_id, $product_name, $price, $quantity, $total_price, $status);
+    
+    if ($order_stmt->execute()) {
+        $product_encoded = urlencode($product_name);
+        $qty_encoded = urlencode($quantity);
+        $total_encoded = urlencode($total_price);
+        
+       
+        echo "<script>
+                // WhatsApp එකට Order විස්තර යැවීමට ලෑස්ති කිරීම (අවශ්‍ය නම් පමණි, නැතහොත් කෙලින්ම my_orders වෙත යා හැක)
+                window.open('https://wa.me/94710665979?text=මම%20$product_encoded%20භාණ්ඩය%20ප්‍රමාණය%20$qty_encoded%20ක්%20මිලදී%20ගැනීමට%20ඇණවුම්%20කළෙමි.%20මුළු%20මිල:%20LKR%20$total_encoded', '_blank');
+                window.location.href = 'my_orders.php';
+              </script>";
+        exit();
+    } else {
+        $error_msg = "Order failed: " . $conn->error;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -72,13 +81,10 @@ $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
         .price { font-size: 2rem; color: #b7e4c7; font-weight: bold; margin: 20px 0; }
         .section-title { color: #b7e4c7; border-bottom: 2px solid #40916c; padding-bottom: 5px; margin-top: 30px; }
         
-        .cart-section { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #40916c; margin-top: 20px; }
-        .qty-input { padding: 10px; width: 60px; border-radius: 8px; border: none; font-size: 1.1rem; text-align: center; margin-right: 10px; }
-        .btn-cart { background: #40916c; color: white; padding: 12px 25px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
-        .btn-cart:hover { background: #2d6a4f; }
-        
-        .btn-whatsapp { background: #25d366; color: white; padding: 12px 25px; border-radius: 10px; text-decoration: none; display: inline-block; font-weight: bold; font-size: 1.1rem; transition: 0.3s; margin-top: 10px; }
-        .btn-whatsapp:hover { background: #128c7e; }
+        .cart-section { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #40916c; margin-top: 20px; text-align: center; }
+        .qty-input { padding: 10px; width: 80px; border-radius: 8px; border: none; font-size: 1.1rem; text-align: center; }
+        .btn-buy { background: #25d366; color: white; padding: 14px 25px; border-radius: 10px; border: none; font-weight: bold; font-size: 1.2rem; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 15px; }
+        .btn-buy:hover { background: #128c7e; }
         .btn-back { color: #b7e4c7; text-decoration: none; border: 1px solid #b7e4c7; padding: 8px 15px; border-radius: 8px; }
     </style>
 </head>
@@ -86,10 +92,12 @@ $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
 
     <div class="nav-container">
         <a href="pharmacy_shop.php" class="btn-back">⬅️ Back to Shop </a>
-        <a href="cart.php" style="color: #b7e4c7; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;">
-            🛒 View Cart  (<?php echo $cart_count; ?>)
+        <a href="my_orders.php" style="color: #b7e4c7; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 8px;">
+            📦 My Orders
         </a>
     </div>
+
+    <?php if (isset($error_msg)) { echo "<p style='color: #ff6b6b; text-align:center;'>$error_msg</p>"; } ?>
 
     <div class="main-content">
         <div>
@@ -98,30 +106,23 @@ $cart_count = isset($_SESSION['cart']) ? array_sum($_SESSION['cart']) : 0;
         
         <div class="info">
             <h1><?php echo htmlspecialchars($row['product_name']); ?></h1>
-            <p style="font-size: 1.2rem; line-height: 1.6;"><?php echo htmlspecialchars($row['description']); ?></p>
-            <p class="price">මිල: LKR <?php echo htmlspecialchars($row['price']); ?></p>
+            <p style="font-size: 1.2rem; line-height: 1.6; text-align: left;"><?php echo htmlspecialchars($row['description']); ?></p>
+            <p class="price" style="text-align: left;">මිල: LKR <?php echo htmlspecialchars($row['price']); ?></p>
 
-            <h3 class="section-title">අඩංගු දේ (Ingredients)</h3>
-            <p><?php echo $row['ingredients'] ? htmlspecialchars($row['ingredients']) : "ස්වාභාවික ඖෂධීය ශාකසාර."; ?></p>
+            <h3 class="section-title" style="text-align: left;">අඩංගු දේ (Ingredients)</h3>
+            <p style="text-align: left;"><?php echo $row['ingredients'] ? htmlspecialchars($row['ingredients']) : "ස්වාභාවික ඖෂධීය ශාකසාර."; ?></p>
 
-            <h3 class="section-title">පාවිච්චි කරන ආකාරය (Usage)</h3>
-            <p><?php echo $row['usage_instructions'] ? htmlspecialchars($row['usage_instructions']) : "වෛද්‍ය උපදෙස් පරිදි භාවිතා කරන්න."; ?></p>
+            <h3 class="section-title" style="text-align: left;">පාවිච්චි කරන ආකාරය (Usage)</h3>
+            <p style="text-align: left;"><?php echo $row['usage_instructions'] ? htmlspecialchars($row['usage_instructions']) : "වෛද්‍ය උපදෙස් පරිදි භාවිතා කරන්න."; ?></p>
             
-           
             <div class="cart-section">
                 <form method="POST" action="product_detail.php?id=<?php echo $id; ?>">
-                    <input type="hidden" name="product_id" value="<?php echo $id; ?>">
-                    <label style="display:block; margin-bottom:8px;">Quantity / ප්‍රමාණය:</label>
-                    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                        <label style="font-size: 1.1rem; font-weight: bold;">Quantity:</label>
                         <input type="number" name="quantity" class="qty-input" value="1" min="1">
-                        <button type="submit" name="add_to_cart" class="btn-cart">Add to Cart </button>
                     </div>
+                    <button type="submit" name="place_order" class="btn-buy">💬 BUY (WhatsApp & Place Order)</button>
                 </form>
-                
-                <div style="margin-top: 15px; border-top: 1px dashed #40916c; padding-top: 15px;">
-                    <a href="https://wa.me/94710665979?text=මම%20<?php echo urlencode($row['product_name']); ?>%20මිලදී%20ගැනීමට%20කැමතියි." 
-                       class="btn-whatsapp" target="_blank">💬  BUY (Whatsapp) </a>
-                </div>
             </div>
         </div>
     </div>
