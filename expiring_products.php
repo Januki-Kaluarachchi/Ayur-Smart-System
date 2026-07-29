@@ -53,8 +53,10 @@ $result = $conn->query($sql);
                 <td style="color: #ff6b6b; font-weight: bold;"><?php echo htmlspecialchars($row['expiry_date']); ?></td>
                 <td><span class="badge">Expiring Soon</span></td>
             </tr>
-            <?php endfor; // Fixed missing loop close tag as well ?>
-            <?php endwhile; ?>
+        
+            <?php
+           endwhile; 
+             ?>
         </table>
     <?php else: ?>
         <p style="text-align: center; padding: 30px; color: #52b788; font-size: 1.2rem;">දින 10ක් ඇතුළත expire වීමට නියමිත කිසිදු භාණ්ඩයක් නොමැත! 👍</p>
