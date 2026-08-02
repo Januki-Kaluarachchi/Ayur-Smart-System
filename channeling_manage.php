@@ -53,7 +53,7 @@ $result = $conn->query($sql);
             if ($result && $result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     echo "<div class='doctor-card'>
-                            <h3>ডေါ. " . htmlspecialchars($row['doctor_name']) . "</h3>
+                            <h3>Dr. " . htmlspecialchars($row['doctor_name']) . "</h3>
                             <p><strong>විශේෂඥතාව:</strong> " . htmlspecialchars($row['specialization']) . "</p>
                             <p><strong>දින සහ වේලාවන්:</strong> " . htmlspecialchars($row['schedule_days'] ?? 'සඳුදා - සිකුරාදා (පෙ.ව. 9.00 - ම.ව. 2.00)') . "</p>
                             <p><strong>දුරකථන අංකය:</strong> " . htmlspecialchars($row['contact'] ?? 'දක්වා නැත') . "</p>
