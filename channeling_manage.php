@@ -8,6 +8,35 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'staff' && $_SESSION['ro
     exit();
 }
 
+// Handle form submission for adding new doctor schedule
+$msg = "";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_doctor'])) {
+    $doctor_name = $_POST['doctor_name'];
+    $specialization = $_POST['specialization'];
+    $schedule_days = $_POST['schedule_days'];
+    $contact = $_POST['contact'];
+
+    $stmt = $conn->prepare("INSERT INTO doctors (doctor_name, specialization, schedule_days, contact) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $doctor_name, $specialization, $schedule_days, $contact);
+    if ($stmt->execute()) {
+        $msg = "නව වෛද්‍ය කාලසටහන සාර්ථකව එකතු කරන ලදී!";
+    } else {
+        $msg = "දෝෂයක් ඇති විය: " . $conn->error;
+    }
+    $stmt->close();
+}
+
+// Handle delete
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $stmt = $conn->prepare("DELETE FROM doctors WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->close();
+    header("Location: channeling_manage.php");
+    exit();
+}
+
 // Fetch doctors and their schedules from database
 $sql = "SELECT * FROM doctors";
 $result = $conn->query($sql);
@@ -17,36 +46,52 @@ $result = $conn->query($sql);
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor Channeling Schedules | Ayur-Smart</title>
+    <title>Doctor Channeling Management | Ayur-Smart</title>
     <style>
         body { background-color: #081c15; color: #d8f3dc; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         .header-container { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(183, 228, 199, 0.2); }
-        .container { max-width: 1100px; margin: 40px auto; padding: 20px; }
-        h2 { color: #b7e4c7; text-align: center; margin-bottom: 30px; font-size: 2rem; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 20px; }
+        h2 { color: #b7e4c7; text-align: center; margin-bottom: 20px; font-size: 1.8rem; }
+        .form-box { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #40916c; margin-bottom: 30px; }
+        .form-box input, .form-box textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; }
+        .btn-submit { background: #40916c; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-submit:hover { background: #52b788; }
         .doctors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .doctor-card { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid #b7e4c7; backdrop-filter: blur(10px); transition: 0.3s; }
-        .doctor-card:hover { transform: translateY(-5px); border-color: #52b788; }
-        .doctor-card h3 { color: #b7e4c7; margin-top: 0; font-size: 1.4rem; }
-        .doctor-card p { margin: 10px 0; color: #a5c4d4; font-size: 0.95rem; }
-        .badge { background: #40916c; color: white; padding: 5px 12px; border-radius: 8px; font-size: 0.85rem; display: inline-block; margin-top: 10px; }
+        .doctor-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #b7e4c7; position: relative; }
+        .doctor-card h3 { color: #b7e4c7; margin-top: 0; font-size: 1.3rem; }
+        .doctor-card p { margin: 8px 0; color: #a5c4d4; font-size: 0.9rem; }
+        .btn-delete { background: #ff6b6b; color: white; padding: 5px 10px; text-decoration: none; border-radius: 5px; font-size: 0.8rem; display: inline-block; margin-top: 10px; }
         .btn-back { color: #b7e4c7; text-decoration: none; border: 1px solid #b7e4c7; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem; }
-        .btn-back:hover { background: rgba(183, 228, 199, 0.1); }
     </style>
 </head>
 <body>
 
     <div class="header-container">
         <div>
-            <a href="staff_dashboard.php" class="btn-back">⬅️ Dashboard වෙත</a>
+            <a href="staff_dashboard.php" class="btn-back">⬅️ Dashboard</a>
         </div>
-        <h2 style="margin: 0; font-size: 1.5rem; color: #b7e4c7;">වෛද්‍ය හමුවීම් කළමනාකරණය</h2>
+        <h2 style="margin: 0; font-size: 1.4rem; color: #b7e4c7;">වෛද්‍ය හමුවීම් කළමනාකරණය (Staff)</h2>
         <div>
-            <a href="logout.php" style="color: #ff6b6b; text-decoration: none; border: 1px solid #ff6b6b; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem;">🚪 ඉවත් වන්න</a>
+            <a href="logout.php" style="color: #ff6b6b; text-decoration: none; border: 1px solid #ff6b6b; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem;">🚪 Log Out</a>
         </div>
     </div>
 
     <div class="container">
-        <h2>🩺 වෛද්‍යවරුන්ගේ කාලසටහන් (Doctor Schedules)</h2>
+        <?php if(!empty($msg)) echo "<p style='color: #52b788; text-align: center; font-weight: bold;'>$msg</p>"; ?>
+
+        <!-- Add Doctor Schedule Form -->
+        <div class="form-box">
+            <h3 style="color: #b7e4c7; margin-top:0;">➕ නව වෛද්‍ය කාලසටහනක් ඇතුළත් කරන්න</h3>
+            <form method="POST" action="">
+                <input type="text" name="doctor_name" placeholder="වෛද්‍යවරයාගේ නම (උදා: Dr. Amal Perera)" required>
+                <input type="text" name="specialization" placeholder="විශේෂඥතාව (උදා: Ayurveda Physician)" required>
+                <input type="text" name="schedule_days" placeholder="දින සහ වේලාවන් (උදා: සඳුදා - සිකුරාදා 9.00 AM - 2.00 PM)" required>
+                <input type="text" name="contact" placeholder="දුරකථන අංකය" required>
+                <button type="submit" name="add_doctor" class="btn-submit">ADD Time Tables </button>
+            </form>
+        </div>
+
+        <h2>📋 පවතින වෛද්‍ය කාලසටහන්</h2>
 
         <div class="doctors-grid">
             <?php
@@ -55,13 +100,13 @@ $result = $conn->query($sql);
                     echo "<div class='doctor-card'>
                             <h3>Dr. " . htmlspecialchars($row['doctor_name']) . "</h3>
                             <p><strong>විශේෂඥතාව:</strong> " . htmlspecialchars($row['specialization']) . "</p>
-                            <p><strong>දින සහ වේලාවන්:</strong> " . htmlspecialchars($row['schedule_days'] ?? 'සඳුදා - සිකුරාදා (පෙ.ව. 9.00 - ම.ව. 2.00)') . "</p>
-                            <p><strong>දුරකථන අංකය:</strong> " . htmlspecialchars($row['contact'] ?? 'දක්වා නැත') . "</p>
-                            <span class='badge'>ප්‍රවේශ්‍යයි</span>
+                            <p><strong>වේලාවන්:</strong> " . htmlspecialchars($row['schedule_days']) . "</p>
+                            <p><strong>දුරකථන:</strong> " . htmlspecialchars($row['contact']) . "</p>
+                            <a href='channeling_manage.php?delete=" . $row['id'] . "' class='btn-delete' onclick='return confirm(\ఈ කාලසටහන මකා දැමීමට අවශ්‍ය බව یقینද?\);'>🗑️ ඉවත් කරන්න</a>
                           </div>";
                 }
             } else {
-                echo "<div style='grid-column: 1/-1; text-align: center;'><p style='color: #52b788; font-size: 1.2rem;'>നിലവിൽ වෛද්‍යවරුන්ගේ දත්ත ඇතුළත් කර නොමැත.</p></div>";
+                echo "<div style='grid-column: 1/-1; text-align: center;'><p style='color: #52b788; font-size: 1.1rem;'>කාලසටහන් කිසිවක් ඇතුළත් කර නැත.</p></div>";
             }
             ?>
         </div>
