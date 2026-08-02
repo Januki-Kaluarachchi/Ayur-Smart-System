@@ -30,7 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } elseif ($user['role'] === 'doctor') {
                 header("Location: doctor_dashboard.php");
                 exit();
-            } else {
+            } 
+            elseif($user['role']== 'staff')
+                {
+                    header("Location: staff_dashboard.php");
+                    exit();
+                }
+            else {
                 header("Location: customer_dashboard.php");
                 exit();
             }
