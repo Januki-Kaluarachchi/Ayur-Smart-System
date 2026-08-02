@@ -89,7 +89,7 @@ $result = $conn->query($sql);
                 <input type="text" name="doctor_name" placeholder="වෛද්‍යවරයාගේ නම (උදා: Dr. Amal Perera)" required>
                 <input type="text" name="specialization" placeholder="විශේෂඥතාව (උදා: Ayurveda Physician)" required>
                 <input type="text" name="schedule" placeholder="කාලසටහන (උදා: 2026-07-25 18:00 හෝ සඳුදා 9AM)" required>
-                <input type="text" name="medical_license_id" placeholder="వైද්‍ය බලපත්‍ර අංකය (Medical License ID)" required>
+                <input type="text" name="medical_license_id" placeholder=" බලපත්‍ර අංකය (Medical License ID)" required>
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit" name="add_doctor" class="btn-submit">වෛද්‍යවරයා ඇතුළත් කරන්න</button>
