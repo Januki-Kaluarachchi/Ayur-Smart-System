@@ -2,13 +2,12 @@
 session_start();
 include 'db.php'; 
 
-// Staff ලොගින් එක පරීක්ෂා කිරීම
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'staff') {
     header("Location: login.html");
     exit();
 }
 
-// ඖෂධයක් එකතු කිරීමේ ක්‍රියාවලිය
+
 if (isset($_POST['add_product'])) {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $price = mysqli_real_escape_string($conn, $_POST['price']);
@@ -17,7 +16,7 @@ if (isset($_POST['add_product'])) {
 }
 ?>
 
-<!DOCTYPE html>
+
 <html lang="si">
 <head>
     <meta charset="UTF-8">
